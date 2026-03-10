@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XtremeLabs Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(-45deg, #070d1a, #06302b, #111d32, #072a27);
+            background-size: 400% 400%;
+            animation: gradient-shift 20s ease infinite;
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ─── Animations ─── */
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(2deg);
+            }
+        }
+
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes icon-spin {
+            from {
+                transform: rotateY(0deg);
+            }
+
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+            }
+
+            50% {
+                opacity: 0.5;
+                box-shadow: 0 0 12px rgba(245, 158, 11, 0.9);
+            }
+        }
+
+        .anim-up {
+            animation: slide-up 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .anim-d1 {
+            animation-delay: 0.05s;
+        }
+
+        .anim-d2 {
+            animation-delay: 0.1s;
+        }
+
+        .anim-d3 {
+            animation-delay: 0.15s;
+        }
+
+        .anim-d4 {
+            animation-delay: 0.2s;
+        }
+
+        .anim-d5 {
+            animation-delay: 0.25s;
+        }
+
+        .anim-d6 {
+            animation-delay: 0.3s;
+        }
+
+        .anim-d7 {
+            animation-delay: 0.35s;
+        }
+
+        .anim-d8 {
+            animation-delay: 0.4s;
+        }
+
+        /* ─── Floating Orbs ─── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 350px;
+            height: 350px;
+            background: #3b82f6;
+            top: -120px;
+            left: -120px;
+            animation: float 18s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 280px;
+            height: 280px;
+            background: #10b981;
+            bottom: -80px;
+            right: -80px;
+            animation: float 18s ease-in-out infinite 6s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: #06b6d4;
+            top: 50%;
+            left: 50%;
+            animation: float 22s ease-in-out infinite 3s;
+        }
+
+        /* ─── Developer Theme Background Snippets ─── */
+        .dev-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.05;
+            font-family: monospace;
+            font-size: 1.5rem;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .code-snippet {
+            position: absolute;
+            animation: float-up linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-20vh);
+                opacity: 0;
+            }
+        }
+
+        /* ─── Main Container ─── */
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 100px 24px 32px;
+            /* Top padding for fixed header, bottom padding reduced */
+            flex: 1;
+        }
+
+        /* ─── Header Bar ─── */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 12px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .header-left h1 {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-left h1:hover {
+            transform: scale(1.02);
+            filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.3));
+        }
+
+        .header-left h1 .logo-x {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left h1 .logo-text {
+            font-size: 1.25rem;
+            /* Slightly smaller to make X more prominent */
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .header-left .tagline {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ─── Navigation Bar ─── */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 6px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 0 20px;
+        }
+
+        .nav-link {
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #94a3b8;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            color: #f8fafc;
+            background: rgba(16, 185, 129, 0.15);
+            /* Greenish tint for active */
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .header-right .powered-text {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .header-right img {
+            height: 40px;
+            width: auto;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-right img:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 18px rgba(16, 185, 129, 0.3);
+        }
+
+        /* ─── Card Grid ─── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        /* ─── Glass Card ─── */
+        .card {
+            background: rgba(255, 255, 255, 0.025);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: 0.6s;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 20px rgba(59, 130, 246, 0.06);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        /* Highlight focus for navigation targets */
+        .card:target {
+            opacity: 1;
+            /* Ensure visible even if entrance animation is interrupted */
+            scroll-margin-top: 110px;
+            /* offset for fixed header */
+            background: rgba(59, 130, 246, 0.08);
+            border-color: #3b82f6;
+            box-shadow: 0 0 35px rgba(59, 130, 246, 0.4);
+            transform: translateY(-8px) scale(1.02);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: card-focus-pulse 2s infinite alternate;
+        }
+
+        @keyframes card-focus-pulse {
+            0% {
+                border-color: rgba(59, 130, 246, 0.4);
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            }
+
+            100% {
+                border-color: #3b82f6;
+                box-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+            }
+        }
+
+        /* ─── Icon ─── */
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 18px;
+            transition: all 0.4s ease;
+        }
+
+        .card:hover .card-icon {
+            animation: icon-spin 0.7s ease-in-out;
+        }
+
+        /* Icon colors */
+        .icon-blue {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .icon-cyan {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .icon-purple {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .icon-emerald {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .icon-amber {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .card:hover .icon-blue {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .card:hover .icon-cyan {
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        .card:hover .icon-purple {
+            background: rgba(168, 85, 247, 0.2);
+        }
+
+        .card:hover .icon-emerald {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .card:hover .icon-amber {
+            background: rgba(245, 158, 11, 0.2);
+        }
+
+        /* ─── Card Content ─── */
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .card:hover .card-title.t-blue {
+            color: #60a5fa;
+        }
+
+        .card:hover .card-title.t-cyan {
+            color: #22d3ee;
+        }
+
+        .card:hover .card-title.t-purple {
+            color: #c084fc;
+        }
+
+        .card:hover .card-title.t-emerald {
+            color: #34d399;
+        }
+
+        .card:hover .card-title.t-amber {
+            color: #fbbf24;
+        }
+
+        .card-desc {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        /* ─── CTA Button ─── */
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
+            margin-top: 22px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            width: fit-content;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .cta:hover::after {
+            left: 100%;
+        }
+
+        .cta svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .cta svg {
+            transform: translateX(4px);
+        }
+
+        .cta-blue {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+
+        .cta-blue:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .cta-cyan {
+            background: rgba(6, 182, 212, 0.1);
+            color: #22d3ee;
+            border-color: rgba(6, 182, 212, 0.25);
+        }
+
+        .cta-cyan:hover {
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        .cta-muted {
+            background: rgba(255, 255, 255, 0.03);
+            color: #64748b;
+            border-color: rgba(255, 255, 255, 0.07);
+            cursor: default;
+        }
+
+        /* ─── Coming Soon Badge ─── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+
+        .badge .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #f59e0b;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        /* ─── Coming Soon Cards (smaller) ─── */
+        .card-sm {
+            padding: 24px;
+        }
+
+        .card-sm .card-icon {
+            width: 52px;
+            height: 52px;
+            font-size: 1.4rem;
+            margin-bottom: 14px;
+        }
+
+        .card-sm .card-title {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .card-sm .card-desc {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .card-sm .cta {
+            margin-top: 16px;
+            font-size: 0.75rem;
+            padding: 8px 16px;
+        }
+
+        /* ─── Section Divider ─── */
+        .divider {
+            text-align: center;
+            margin: 44px 0 32px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.3), transparent);
+        }
+
+        .divider span {
+            position: relative;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 8px 24px;
+            margin: 0 16px;
+            border-radius: 8px;
+            color: #34d399;
+            /* Emerald 400 */
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+            backdrop-filter: blur(8px);
+        }
+
+        /* ─── Footer ─── */
+        .footer {
+            width: 100%;
+            margin: 0;
+            background: rgba(15, 23, 42, 0.4);
+            /* Dark slate background */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 32px 32px 24px;
+            margin-top: auto;
+            /* Push to bottom if content is short */
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: center;
+        }
+
+        .footer-dev {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-dev img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(59, 130, 246, 0.25);
+            object-fit: cover;
+        }
+
+        .footer-dev h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .footer-dev p {
+            font-size: 0.75rem;
+            color: #60a5fa;
+        }
+
+        .footer-dev .sub {
+            font-size: 0.65rem;
+            color: #475569;
+            margin-top: 4px;
+        }
+
+        .footer-center {
+            text-align: center;
+        }
+
+        .footer-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 10px;
+            background: rgba(34, 197, 94, 0.08);
+            /* Fallback */
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .footer-wa:hover {
+            background: rgba(34, 197, 94, 0.18);
+            transform: scale(1.04);
+        }
+
+        .footer-portfolio {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 10px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .footer-portfolio:hover {
+            background: rgba(99, 102, 241, 0.25);
+            transform: scale(1.04);
+        }
+
+        /* Ensure small icons in footer links */
+        .footer-center a svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer-right p {
+            font-size: 0.7rem;
+            color: #475569;
+            margin: 0;
+        }
+
+        .footer-right p+p {
+            margin-top: 3px;
+        }
+
+        /* ═══════════════════════════════════════════
+           RESPONSIVE — Tablet (768px - 1100px)
+           ═══════════════════════════════════════════ */
+        @media (max-width: 1100px) {
+            .container {
+                max-width: 800px;
+                padding: 28px 20px 20px;
+            }
+
+            .grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+            }
+
+            .card {
+                padding: 28px;
+            }
+
+            .card-sm {
+                padding: 20px;
+            }
+
+            .header-nav {
+                margin: 0 10px;
+            }
+
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .header-left,
+            .header-right {
+                flex: initial;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .header-nav {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                margin: 0;
+            }
+        }
+
+        /* ═══════════════════════════════════════════
+           RESPONSIVE — Small Tablet / Large Mobile
+           ═══════════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .container {
+                padding: 90px 16px 80px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding: 10px 16px;
+            }
+
+            .header-left {
+                align-items: center;
+            }
+
+            .header-left h1 .logo-x {
+                font-size: 1.8rem;
+            }
+
+            .header-left h1 .logo-text {
+                font-size: 1.2rem;
+            }
+
+            .header-left .tagline {
+                font-size: 0.75rem;
+            }
+
+            .header-right {
+                justify-content: center;
+                display: none;
+                /* Hide logo on mobile to save space */
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+            }
+
+            .card-desc {
+                font-size: 0.82rem;
+            }
+
+            .card-sm {
+                padding: 20px;
+            }
+
+            .card-sm .card-title {
+                font-size: 1rem;
+            }
+
+            .footer {
+                padding: 12px 16px;
+                position: static;
+                /* Unfix footer on small screens to prevent overlap */
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-dev {
+                justify-content: center;
+            }
+
+            .footer-right {
+                text-align: center;
+            }
+        }
+
+        /* ═══════════════════════════════════════════
+           RESPONSIVE — Mobile (< 480px)
+           ═══════════════════════════════════════════ */
+        @media (max-width: 480px) {
+            .container {
+                padding: 80px 12px 20px;
+            }
+
+            .header {
+                padding: 10px 12px;
+                margin-bottom: 20px;
+            }
+
+            .header-left h1 {
+                font-size: 1.25rem;
+            }
+
+            .card {
+                padding: 20px;
+                border-radius: 14px;
+            }
+
+            .card-icon {
+                width: 52px;
+                height: 52px;
+                font-size: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .card-desc {
+                font-size: 0.8rem;
+            }
+
+            .cta {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+
+            .card-sm {
+                padding: 16px;
+                border-radius: 12px;
+            }
+
+            .card-sm .card-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+
+            .card-sm .card-title {
+                font-size: 0.95rem;
+            }
+
+            .card-sm .card-desc {
+                font-size: 0.75rem;
+            }
+
+            .divider {
+                margin: 32px 0 22px;
+            }
+
+            .footer {
+                margin-top: 40px;
+                padding-top: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="dev-bg">
+        <span class="code-snippet" style="left: 10%; animation-duration: 25s; animation-delay: 0s;">&lt;div&gt;</span>
+        <span class="code-snippet" style="left: 30%; animation-duration: 35s; animation-delay: 5s;">{ ... }</span>
+        <span class="code-snippet" style="left: 50%; animation-duration: 28s; animation-delay: 2s;">function()</span>
+        <span class="code-snippet" style="left: 70%; animation-duration: 32s; animation-delay: 8s;">&lt;/&gt;</span>
+        <span class="code-snippet" style="left: 85%; animation-duration: 22s; animation-delay: 4s;">import</span>
+        <span class="code-snippet" style="left: 15%; animation-duration: 18s; animation-delay: 10s;">=&gt;</span>
+        <span class="code-snippet" style="left: 75%; animation-duration: 26s; animation-delay: 15s;">console.log</span>
+    </div>
+
+    <div class="container">
+        <!-- ─── Header Bar ─── -->
+        <header class="header anim-up anim-d1">
+            <div class="header-left">
+                <h1>
+                    <span class="logo-x">
+                        <svg viewBox="-10 -10 120 120" width="46" height="46">
+                            <!-- Blue Swoosh -->
+                            <path d="M 15 90 C -20 50, 20 -15, 95 20" fill="none" stroke="#3b82f6" stroke-width="8"
+                                stroke-linecap="round" />
+                            <!-- Dark X -->
+                            <path
+                                d="M 10 10 L 35 10 L 50 32 L 65 10 L 90 10 L 62.5 50 L 90 90 L 65 90 L 50 68 L 35 90 L 10 90 L 37.5 50 Z"
+                                fill="#000000" />
+                        </svg>
+                    </span>
+                    <span class="logo-text">tremeLabs Tools</span>
+                </h1>
+                <div class="tagline">Document Automation & Workflow Suite</div>
+            </div>
+
+            <!-- Modern Navigation -->
+            <nav class="header-nav">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="#converter-card" class="nav-link">Converter</a>
+                <a href="#merger-card" class="nav-link">Merger</a>
+                <a href="#exam-card" class="nav-link">Practice Exam</a>
+                <a href="#tco-card" class="nav-link">TCO Extractor</a>
+            </nav>
+
+            <div class="header-right">
+                <span class="powered-text">Powered By</span>
+                <a href="https://www.xtremelabs.io" target="_blank" title="Visit XtremeLabs">
+                    <img src="/static/xtremelabs logo.jpg" alt="XtremeLabs Logo">
+                </a>
+            </div>
+        </header>
+
+        <!-- ─── Divider ─── -->
+        <div class="divider anim-up anim-d1">
+            <span>Active Tools</span>
+        </div>
+
+        <!-- ─── Active Tools ─── -->
+        <div class="grid-2" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+            <!-- Word Converter -->
+            <a href="/converter" id="converter-card" class="card anim-up anim-d2">
+                <div class="card-icon icon-blue">📄</div>
+                <h2 class="card-title t-blue">Word Converter</h2>
+                <p class="card-desc">
+                    Convert Markdown files to beautiful Word documents with customizable watermarks, borders,
+                    formatting, and XtremeLabs branding.
+                </p>
+                <div class="cta cta-blue">
+                    Launch Tool
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
+
+            <!-- Feature Merger -->
+            <a href="/feature-merger" id="merger-card" class="card anim-up anim-d3">
+                <div class="card-icon icon-cyan">🔄</div>
+                <h2 class="card-title t-cyan">Feature Merger</h2>
+                <p class="card-desc">
+                    Insert a single Feature page into multiple target Word documents at once and download them as a
+                    convenient ZIP archive.
+                </p>
+                <div class="cta cta-cyan">
+                    Launch Tool
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
+
+            <!-- Practice Exam -->
+            <a href="https://practice-exam-validator.vercel.app/" target="_blank" id="exam-card"
+                class="card anim-up anim-d5">
+                <div class="card-icon icon-purple">📝</div>
+                <h2 class="card-title t-purple">Practice Exam Tool</h2>
+                <p class="card-desc">Generate and take practice exams with smart question banks and track your progress.
+                </p>
+                <div class="cta cta-purple"
+                    style="background: rgba(168,85,247,0.1); color: #c084fc; border-color: rgba(168,85,247,0.25);">
+                    Launch Tool
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
+
+            <!-- TOC Extractor -->
+            <a href="https://xlabsuserrecordings.blob.core.windows.net/xlabscoursecontent/XtremeLabs/TCO.exe" download
+                id="tco-card" class="card anim-up anim-d6">
+                <div class="card-icon icon-emerald">📑</div>
+                <h2 class="card-title t-emerald">TOC Extractor</h2>
+                <p class="card-desc">Automatically extract and generate structured Table of Contents from your
+                    documents.</p>
+                <div class="cta cta-emerald"
+                    style="background: rgba(16,185,129,0.1); color: #34d399; border-color: rgba(16,185,129,0.25);">
+                    Get
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                </div>
+            </a>
+        </div>
+
+        <!-- ─── Divider ─── -->
+        <div class="divider anim-up anim-d4">
+            <span>Coming Soon</span>
+        </div>
+
+        <!-- ─── Coming Soon Tools ─── -->
+        <div class="grid-3" style="grid-template-columns: 1fr; max-width: 400px; margin: 0 auto;">
+            <!-- Scoring Guider -->
+            <a href="#" id="scoringGuiderLink" class="card card-sm anim-up anim-d7">
+                <div class="card-icon icon-amber">🎯</div>
+                <span class="badge"><span class="dot"></span> Coming Soon</span>
+                <h2 class="card-title t-amber">Scoring Guider</h2>
+                <p class="card-desc">Smart scoring assistant that guides you through grading rubrics with accuracy and
+                    consistency.</p>
+                <div class="cta cta-muted">In Development</div>
+            </a>
+        </div>
+
+    </div>
+    </div>
+
+    <!-- ─── Footer (Full Width) ─── -->
+    <footer class="footer anim-up anim-d8">
+        <div class="footer-grid max-w-[1100px] mx-auto px-[24px]" style="max-width: 1100px; margin: 0 auto;">
+            <!-- Developer -->
+            <div>
+                <div class="footer-dev">
+                    <img src="/static/mypic.jpg" alt="Developer">
+                    <div>
+                        <h4>Developed By</h4>
+                        <p>Hafiz Muhammad Ahsan</p>
+                    </div>
+                </div>
+                <p class="sub" style="font-size:0.65rem;color:#475569;margin-top:6px;">XtremeLabs Document Tools</p>
+            </div>
+
+            <!-- Contact -->
+            <div class="footer-center flex flex-col items-center gap-3">
+                <a href="https://wa.me/923042288296" target="_blank"
+                    class="footer-wa w-full max-w-[180px] justify-center text-center">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-5.031 1.378l-.361.214-3.741-.982.998 3.645-.235.364a9.964 9.964 0 001.516 5.383c.608 1.02 1.414 1.966 2.368 2.72.96.749 2.016 1.325 3.105 1.7 1.243.379 2.589.443 3.908.142 4.411-.926 7.6-5.053 7.6-9.77 0-2.664-.862-5.159-2.509-7.262-.937-1.204-2.104-2.236-3.424-2.979-.677-.408-1.393-.749-2.121-.996z" />
+                    </svg>
+                    WhatsApp
+                </a>
+
+                <a href="https://hafizmuhammadahsan.vercel.app/" target="_blank"
+                    class="footer-portfolio w-full max-w-[180px] justify-center text-center">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                    </svg>
+                    My Portfolio
+                </a>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-right">
+                <p>© 2026 XtremeLabs Tools</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

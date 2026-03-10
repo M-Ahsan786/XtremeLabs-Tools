@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Document Converter - Markdown to Word</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(2deg);
+            }
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(59, 130, 246, 0.8);
+            }
+        }
+
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rotate-slow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes rotate-360-hover {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes file-pop {
+            0% {
+                transform: scale(0) rotate(-10deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2) rotate(5deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-float-delay {
+            animation: float 6s ease-in-out infinite 2s;
+        }
+
+        .animate-float-delay-2 {
+            animation: float 6s ease-in-out infinite 4s;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .animate-slide-up {
+            animation: slide-up 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .animate-bounce-in {
+            animation: bounce-in 0.5s ease-out forwards;
+        }
+
+        .animate-rotate-slow {
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        .animate-file-pop {
+            animation: file-pop 0.4s ease-out forwards;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(-45deg, #0c1929, #1a365d, #0f172a, #1e3a5f);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+            transition: 0.6s;
+            pointer-events: none;
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), transparent, rgba(6, 182, 212, 0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: source-out;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .glass-card:hover::after {
+            opacity: 1;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .button-primary:active {
+            transform: translateY(0);
+        }
+
+        .upload-zone {
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone.dragover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            transform: scale(1.01);
+        }
+
+        .floating-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: #3b82f6;
+            top: -100px;
+            left: -100px;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 250px;
+            height: 250px;
+            background: #06b6d4;
+            bottom: -50px;
+            right: -50px;
+            animation: float 15s ease-in-out infinite 5s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: #ec4899;
+            top: 50%;
+            left: 10%;
+            animation: float 15s ease-in-out infinite 10s;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 9999;
+            animation: slide-up 0.3s ease-out;
+            border-left: 4px solid #3b82f6;
+            backdrop-filter: blur(10px);
+        }
+
+        .notification.error {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .notification.success {
+            border-left-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .file-item {
+            animation: file-pop 0.4s ease-out forwards;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Table styling for preview - match Word format */
+        #preview table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Times New Roman', serif;
+            font-size: 11pt;
+        }
+
+        #preview table th {
+            background-color: #d3d3d3;
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+            font-weight: bold;
+            color: #000;
+        }
+
+        #preview table td {
+            border: 1px solid #999;
+            padding: 8px;
+            color: #000;
+            background-color: #ffffff;
+        }
+
+        #preview table tr:nth-child(even) td {
+            background-color: #f0f0f0;
+        }
+
+        #preview table tr:hover td {
+            background-color: #e8e8e8;
+        }
+
+        /* Icon rotation on hover */
+        .group-hover\:rotate-360:hover {
+            animation: rotate-360-hover 0.6s ease-in-out forwards !important;
+        }
+
+        /* Modern Back Button styling */
+        .btn-modern-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            color: #93c5fd;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-modern-back:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-color: rgba(147, 197, 253, 0.4);
+        }
+
+        .btn-modern-back svg {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-modern-back:hover svg {
+            transform: translateX(-3px);
+        }
+    </style>
+</head>
+
+<body class="gradient-bg min-h-screen overflow-x-hidden">
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+
+    <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-6xl">
+            <!-- Header -->
+            <div class="text-center mb-12 animate-slide-up" style="animation-delay: 0s">
+                <h1 class="text-5xl font-bold mb-2 text-white">
+                    <span class="gradient-text">Lab Document Converter</span>
+                </h1>
+                <p class="text-xl text-blue-200 mb-4">Convert Markdown to Beautiful Word Documents</p>
+                <div class="mt-4 flex justify-center">
+                    <a href="/" class="btn-modern-back">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Back to Main Menu
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Card -->
+            <div class="glass-card rounded-2xl p-8 animate-slide-up" style="animation-delay: 0.1s">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Upload Section with Glass Border -->
+                    <div
+                        class="flex flex-col h-full rounded-xl p-4 border border-blue-400/30 bg-blue-500/5 backdrop-blur-sm">
+                        <h2 class="text-2xl font-semibold text-white mb-4">📁 Upload Files</h2>
+
+                        <!-- Drop Zone -->
+                        <div class="upload-zone p-6 text-center flex-1 flex flex-col items-center justify-center cursor-pointer rounded-lg border-2 border-dashed border-blue-400/50 hover:border-blue-400 hover:bg-blue-500/10 transition-all duration-300"
+                            id="uploadZone">
+                            <div class="text-6xl mb-3" id="uploadIcon">📤</div>
+                            <p class="text-blue-300 font-medium">Drag markdown files here</p>
+                            <p class="text-blue-400 text-sm">or click to select</p>
+                            <input type="file" id="fileInput" multiple accept=".md,.markdown,.txt" class="hidden">
+                        </div>
+
+                        <!-- File Count Badge -->
+                        <div id="fileCountBadge" class="mt-4 hidden">
+                            <span class="badge" id="badgeText">0 files ready</span>
+                        </div>
+
+                        <!-- Settings -->
+                        <div class="mt-4 space-y-4">
+                            <label class="flex items-center text-blue-200">
+                                <input type="checkbox" id="includeImages" class="mr-3 w-4 h-4">
+                                <span>Include images in document</span>
+                            </label>
+                            <label class="flex items-center text-blue-200">
+                                <input type="checkbox" id="addWatermark" class="mr-3 w-4 h-4">
+                                <span>Add XtremeLabs LLC text watermark</span>
+                            </label>
+                            <label class="flex items-center text-blue-200">
+                                <input type="checkbox" id="addPageBorder" class="mr-3 w-4 h-4">
+                                <span>Add page border</span>
+                            </label>
+                            <label class="flex items-center text-blue-200">
+                                <input type="checkbox" id="addPageNumbers" class="mr-3 w-4 h-4">
+                                <span>Add page numbers in footer</span>
+                            </label>
+                            <label class="flex items-center text-blue-200">
+                                <input type="checkbox" id="addLogo" class="mr-3 w-4 h-4">
+                                <span>Add XtremeLabs logo in footer</span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Preview Section with Glass Border -->
+                    <div class="flex flex-col rounded-xl p-4 border border-blue-400/30 bg-blue-500/5 backdrop-blur-sm"
+                        style="height: 600px;">
+                        <h2 class="text-2xl font-semibold text-white mb-4">📄 Word Preview</h2>
+                        <!-- File Selector Dropdown -->
+                        <div id="fileSelectContainer" class="mb-4 hidden animate-slide-up"
+                            style="animation-delay: 0.05s">
+                            <label class="block text-blue-200 text-sm font-medium mb-2">Select File:</label>
+                            <select id="fileSelector"
+                                class="w-full px-4 py-2 rounded-lg bg-blue-950/40 border border-blue-500/30 text-white placeholder-blue-300/50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-filter backdrop-blur-md transition-all duration-300 hover:border-blue-400/50 cursor-pointer">
+                                <option value="">Choose file to preview...</option>
+                            </select>
+                        </div>
+                        <div
+                            class="flex-1 bg-white rounded-lg overflow-hidden border border-gray-200 shadow-lg flex flex-col min-h-0">
+                            <!-- Document Header -->
+                            <div
+                                class="bg-gradient-to-r from-gray-50 to-blue-50 px-6 py-3 border-b border-gray-200 flex-shrink-0">
+                                <p class="text-gray-600 text-xs font-mono">📋 Document Preview (A4 Size)</p>
+                            </div>
+                            <!-- Document Content with Scrollbar -->
+                            <div id="preview" class="flex-1 overflow-y-auto p-6 text-gray-800 text-sm font-serif"
+                                style="font-family: 'Times New Roman', serif;">
+                                <div class="text-center text-gray-400 py-20">
+                                    <p>👆 Upload markdown file to see Word preview</p>
+                                    <p class="text-xs mt-2">Shows exact formatting from converted document</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files List - Below both sections -->
+                <div class="mt-6 pt-6 border-t border-blue-400/20">
+                    <h3 class="text-lg font-semibold text-white mb-4">📋 Uploaded Files</h3>
+                    <div id="filesList" class="grid md:grid-cols-2 gap-3 max-h-48 overflow-y-auto"></div>
+                </div>
+
+                <!-- Progress -->
+                <div id="progressContainer" class="mt-6 hidden">
+                    <div class="flex justify-between items-center mb-2">
+                        <span id="progressText" class="text-blue-300 text-sm">Processing...</span>
+                        <span id="progressPercent" class="text-blue-300 text-sm font-mono">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-8 flex gap-4">
+                    <button id="convertBtn"
+                        class="button-primary flex-1 text-white font-semibold py-3 px-6 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled>
+                        <span id="convertBtnText">Convert to Word</span>
+                    </button>
+                    <button id="clearBtn"
+                        class="px-6 py-3 rounded-lg border border-red-400/50 text-red-300 hover:bg-red-500/10 hover:border-red-400 transition font-semibold">
+                        Reset Session
+                    </button>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="grid md:grid-cols-3 gap-4 mt-8 animate-slide-up" style="animation-delay: 0.2s">
+                <div class="glass-card rounded-lg p-4">
+                    <p class="text-blue-300 text-sm">✓ Markdown Support</p>
+                    <p class="text-white text-xs mt-1">All markdown formatting preserved</p>
+                </div>
+                <div class="glass-card rounded-lg p-4">
+                    <p class="text-blue-300 text-sm">✓ Image Embedding</p>
+                    <p class="text-white text-xs mt-1">Automatic image fetching & embedding</p>
+                </div>
+                <div class="glass-card rounded-lg p-4">
+                    <p class="text-blue-300 text-sm">✓ Professional Output</p>
+                    <p class="text-white text-xs mt-1">Beautiful formatted Word documents</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supported Formatting Section -->
+    <div class="relative z-10 mt-16 mb-16">
+        <div class="w-full max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 animate-slide-up" style="animation-delay: 0.3s">
+                <h3 class="text-3xl font-bold text-white mb-2">
+                    <span class="gradient-text">Supported Formatting</span>
+                </h3>
+                <p class="text-blue-200">All markdown features with beautiful styling</p>
+            </div>
+
+            <!-- Formatting Cards Grid -->
+            <div class="grid md:grid-cols-4 gap-4 text-sm animate-slide-up" style="animation-delay: 0.35s">
+                <!-- Headings Card -->
+                <div class="glass-card rounded-xl p-4 cursor-pointer group">
+                    <div
+                        class="info-icon w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mb-3 group-hover:rotate-360 transition-transform duration-500">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 8h10M7 12h10M7 16h10" />
+                        </svg>
+                    </div>
+                    <div class="font-semibold text-blue-300 mb-2">Headings</div>
+                    <div class="text-slate-400 text-xs">## → H1 Dark<br>#### → H2 Blue<br>### → H3 Light</div>
+                </div>
+
+                <!-- Callouts Card -->
+                <div class="glass-card rounded-xl p-4 cursor-pointer group">
+                    <div
+                        class="info-icon w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mb-3 group-hover:rotate-360 transition-transform duration-500">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="font-semibold text-green-300 mb-2">Callouts</div>
+                    <div class="text-slate-400 text-xs">Note: Blue<br>Tip: Green<br>Important: Red<br>Congratulations
+                    </div>
+                </div>
+
+                <!-- Elements Card -->
+                <div class="glass-card rounded-xl p-4 cursor-pointer group">
+                    <div
+                        class="info-icon w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mb-3 group-hover:rotate-360 transition-transform duration-500">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </div>
+                    <div class="font-semibold text-purple-300 mb-2">Elements</div>
+                    <div class="text-slate-400 text-xs">Tables<br>Images<br>Code Blocks<br>Bullet Points</div>
+                </div>
+
+                <!-- Formatting Card -->
+                <div class="glass-card rounded-xl p-4 cursor-pointer group">
+                    <div
+                        class="info-icon w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-3 group-hover:rotate-360 transition-transform duration-500">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <div class="font-semibold text-cyan-300 mb-2">Inline Text</div>
+                    <div class="text-slate-400 text-xs">**Bold**<br>*Italic*<br>`Code`<br>Hyperlinks</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 mt-20 border-t border-blue-500/20 py-12">
+        <div class="w-full max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8 items-center animate-slide-up" style="animation-delay: 0.4s">
+                <!-- Developer Info -->
+                <div class="text-center md:text-left flex flex-col items-center md:items-start">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="/static/mypic.jpg" alt="Developer"
+                            class="w-12 h-12 rounded-full border-2 border-blue-400 object-cover">
+                        <div>
+                            <h4 class="text-lg font-semibold text-white">Developed By</h4>
+                            <p class="text-blue-300">Hafiz Muhammad Ahsan</p>
+                        </div>
+                    </div>
+                    <p class="text-blue-400 text-sm">Lab Document Converter Tool</p>
+                </div>
+
+                <!-- Contact -->
+                <div class="text-center flex flex-col items-center gap-3">
+                    <h4 class="text-lg font-semibold text-white mb-2">Contact Us</h4>
+                    <a href="https://wa.me/923042288296" target="_blank"
+                        class="w-full max-w-[180px] justify-center inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500/20 hover:bg-green-500/40 text-green-300 transition-all duration-300 hover:scale-105 text-[0.8rem] font-medium">
+                        <svg class="w-4 h-4" style="width: 18px; height: 18px; flex-shrink: 0;" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-5.031 1.378l-.361.214-3.741-.982.998 3.645-.235.364a9.964 9.964 0 001.516 5.383c.608 1.02 1.414 1.966 2.368 2.72.96.749 2.016 1.325 3.105 1.7 1.243.379 2.589.443 3.908.142 4.411-.926 7.6-5.053 7.6-9.77 0-2.664-.862-5.159-2.509-7.262-.937-1.204-2.104-2.236-3.424-2.979-.677-.408-1.393-.749-2.121-.996z" />
+                        </svg>
+                        WhatsApp
+                    </a>
+
+                    <a href="https://hafizmuhammadahsan.vercel.app/" target="_blank"
+                        class="w-full max-w-[180px] justify-center inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/25 border border-indigo-500/15 text-indigo-400 transition-all duration-300 hover:scale-105 text-[0.8rem] font-medium">
+                        <svg class="w-4 h-4" style="width: 18px; height: 18px; flex-shrink: 0;" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                        My Portfolio
+                    </a>
+                </div>
+
+                <!-- Footer Note -->
+                <div class="text-center md:text-right">
+                    <p class="text-blue-300 text-sm">🚀 Modern Web Application - v.1</p>
+                    <p class="text-slate-500 text-xs mt-2">© 2026 Lab Document Converter</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        let uploadedFiles = [];
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const filesList = document.getElementById('filesList');
+        const fileCountBadge = document.getElementById('fileCountBadge');
+        const badgeText = document.getElementById('badgeText');
+        const convertBtn = document.getElementById('convertBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const preview = document.getElementById('preview');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressText = document.getElementById('progressText');
+        const includeImagesCheckbox = document.getElementById('includeImages');
+        const addWatermarkCheckbox = document.getElementById('addWatermark');
+        const addPageBorderCheckbox = document.getElementById('addPageBorder');
+        const addPageNumbersCheckbox = document.getElementById('addPageNumbers');
+        const addLogoCheckbox = document.getElementById('addLogo');
+        const fileSelector = document.getElementById('fileSelector');
+        const fileSelectContainer = document.getElementById('fileSelectContainer');
+
+        // File upload handling
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        function handleFiles(files) {
+            uploadedFiles = Array.from(files);
+            updateFilesList();
+            updateFileSelector();
+
+            // Only auto-preview for single file, wait for dropdown selection for multiple files
+            if (uploadedFiles.length === 1) {
+                updatePreview(uploadedFiles[0]);
+            } else if (uploadedFiles.length > 1) {
+                // Clear preview - user must select from dropdown
+                document.getElementById('preview').innerHTML = '<div class="text-center text-gray-400 py-20"><p>👆 Select a file from dropdown to preview</p></div>';
+            }
+        }
+
+        function updateFilesList() {
+            filesList.innerHTML = '';
+            if (uploadedFiles.length === 0) {
+                fileCountBadge.classList.add('hidden');
+                convertBtn.disabled = true;
+                filesList.innerHTML = '<p class="text-slate-400 text-sm col-span-2 text-center py-4">No files uploaded yet</p>';
+                return;
+            }
+
+            convertBtn.disabled = false;
+            badgeText.textContent = `${uploadedFiles.length} file${uploadedFiles.length > 1 ? 's' : ''} ready`;
+            fileCountBadge.classList.remove('hidden');
+
+            uploadedFiles.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'file-item flex justify-between items-center rounded-lg p-3 bg-blue-500/10 border border-blue-400/20 hover:border-blue-400/40 hover:bg-blue-500/15 transition-all duration-300';
+                item.innerHTML = `
+                    <div class="flex items-center flex-1">
+                        <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-blue-200 font-medium truncate text-sm">${file.name}</p>
+                            <p class="text-blue-400 text-xs">${(file.size / 1024).toFixed(1)} KB</p>
+                        </div>
+                    </div>
+                    <button class="text-red-400 hover:text-red-300 text-sm ml-2 px-2 py-1 rounded hover:bg-red-500/20 transition-all" onclick="removeFile(${index})">✕</button>
+                `;
+                filesList.appendChild(item);
+            });
+        }
+
+        function updateFileSelector() {
+            fileSelector.innerHTML = '<option value="">Select file to preview</option>';
+            if (uploadedFiles.length === 0) {
+                fileSelectContainer.classList.add('hidden');
+                return;
+            }
+
+            if (uploadedFiles.length > 1) {
+                fileSelectContainer.classList.remove('hidden');
+                uploadedFiles.forEach((file, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = file.name;
+                    fileSelector.appendChild(option);
+                });
+            } else {
+                fileSelectContainer.classList.add('hidden');
+            }
+        }
+
+        fileSelector.addEventListener('change', (e) => {
+            const index = parseInt(e.target.value);
+            if (index >= 0 && index < uploadedFiles.length) {
+                updatePreview(uploadedFiles[index]);
+            }
+        });
+
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            updateFilesList();
+            updateFileSelector();
+            if (uploadedFiles.length > 0) {
+                updatePreview(uploadedFiles[0]);
+            } else {
+                preview.innerHTML = '<div class="text-center text-gray-400 py-20"><p>👆 Upload markdown file to see Word preview</p><p class="text-xs mt-2">Shows exact formatting from converted document</p></div>';
+            }
+        }
+
+        function updatePreview(file) {
+            if (!file) {
+                preview.innerHTML = '<div class="text-center text-gray-400 py-20"><p>👆 Upload markdown file to see Word preview</p><p class="text-xs mt-2">Shows exact formatting from converted document</p></div>';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+
+                // Show loading state
+                preview.innerHTML = '<div class="text-center text-gray-400 py-10"><p>⏳ Generating preview...</p></div>';
+
+                // Send to backend for HTML preview generation
+                const formData = new FormData();
+                formData.append('markdown', content);
+                formData.append('includeImages', includeImagesCheckbox.checked);
+
+                fetch('/api/preview', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.html) {
+                            preview.innerHTML = data.html;
+                        } else if (data.error) {
+                            preview.innerHTML = `<div class="text-center text-red-400 py-10"><p>Error: ${escapeHtml(data.error)}</p></div>`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Preview error:', error);
+                        preview.innerHTML = `<div class="text-center text-red-400 py-10"><p>Error loading preview</p></div>`;
+                    });
+            };
+            reader.readAsText(file);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function updateProgress(percent, text) {
+            progressFill.style.width = percent + '%';
+            progressPercent.textContent = percent + '%';
+            progressText.textContent = text;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 4000);
+        }
+
+        // Convert button
+        convertBtn.addEventListener('click', async () => {
+            if (uploadedFiles.length === 0) {
+                showNotification('Please select files to convert', 'error');
+                return;
+            }
+
+            progressContainer.classList.remove('hidden');
+            convertBtn.disabled = true;
+
+            try {
+                for (const file of uploadedFiles) {
+                    updateProgress(0, `Converting ${file.name}...`);
+
+                    let simulatedProgress = 0;
+                    const progressInterval = setInterval(() => {
+                        if (simulatedProgress < 90) {
+                            simulatedProgress += Math.floor(Math.random() * 5) + 2;
+                            if (simulatedProgress > 90) simulatedProgress = 90;
+                            updateProgress(simulatedProgress, `Converting ${file.name}...`);
+                        }
+                    }, 150);
+
+                    const fileContent = await file.text();
+                    const formData = new FormData();
+                    formData.append('markdown', fileContent);
+                    formData.append('filename', file.name);
+                    formData.append('includeImages', includeImagesCheckbox.checked);
+                    formData.append('addWatermark', addWatermarkCheckbox.checked);
+                    formData.append('addPageBorder', addPageBorderCheckbox.checked);
+                    formData.append('addPageNumbers', addPageNumbersCheckbox.checked);
+                    formData.append('addLogo', addLogoCheckbox.checked);
+
+                    const response = await fetch('/api/convert', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    clearInterval(progressInterval);
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || 'Conversion failed');
+                    }
+
+                    updateProgress(100, `Completed ${file.name}!`);
+
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = file.name.replace(/\.(md|markdown|txt)$/i, '') + '.docx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                setTimeout(() => {
+                    progressContainer.classList.add('hidden');
+                    showNotification(`${uploadedFiles.length} Word document${uploadedFiles.length > 1 ? 's' : ''} downloaded!`);
+                }, 500);
+
+            } catch (error) {
+                console.error(error);
+                progressContainer.classList.add('hidden');
+                showNotification('Error: ' + error.message, 'error');
+            } finally {
+                convertBtn.disabled = uploadedFiles.length === 0;
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            uploadedFiles = [];
+            fileInput.value = '';
+            // Uncheck all option checkboxes
+            includeImagesCheckbox.checked = false;
+            addWatermarkCheckbox.checked = false;
+            addPageBorderCheckbox.checked = false;
+            addPageNumbersCheckbox.checked = false;
+            addLogoCheckbox.checked = false;
+            updateFilesList();
+            updateFileSelector();
+            preview.innerHTML = '<div class="text-center text-gray-400 py-20"><p>👆 Upload markdown file to see Word preview</p><p class="text-xs mt-2">Shows exact formatting from converted document</p></div>';
+        });
+
+    </script>
+</body>
+
+</html>
