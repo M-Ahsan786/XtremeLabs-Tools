@@ -485,43 +485,98 @@ class MarkdownConverter:
         para.paragraph_format.space_after = Pt(6)
 
     def _add_url_hyperlink(self, paragraph, text):
-        """Add text with URL hyperlinks as blue bold clickable links"""
+        """Add text with URL hyperlinks as native Word blue clickable links"""
         # Convert HTML tags to markdown first
         text = self._convert_html_to_markdown(text)
 
-        # Pattern to match URLs - stop at space or common punctuation, including backticks
-        url_pattern = r'(https?://[^\s),\.\!\?;:`]+)'
-        parts = re.split(url_pattern, text)
+        # Pattern: backtick-wrapped URLs OR plain URLs
+        # We capture the whole match including backticks if present to replace them
+        # Group 1: URL inside backticks
+        # Group 2: plain URL
+        url_pattern = r'`(https?://[^`]+)`|(https?://[^\s\)\],!?;`"]+)'
 
-        for part in parts:
-            if re.match(r'https?://', part):
-                # This is a URL - add as clickable hyperlink
-                # Remove any backticks around URL
-                clean_part = part.strip('`')
-                run = paragraph.add_run(clean_part)
-                run.font.color.rgb = RGBColor(0, 0, 255)  # Blue
+        last_end = 0
+        for m in re.finditer(url_pattern, text):
+            # Add the plain text before this URL
+            before = text[last_end:m.start()]
+            if before:
+                self._add_formatted_runs(paragraph, before)
+
+            # The URL itself (whichever group matched)
+            clean_url = (m.group(1) or m.group(2)).strip()
+            
+            # Create a proper hyperlink element
+            try:
+                # Add relationship
+                rel_id = self.doc.part.relate_to(
+                    clean_url,
+                    'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink',
+                    is_external=True
+                )
+
+                # Create the w:hyperlink tag
+                hyperlink = OxmlElement('w:hyperlink')
+                hyperlink.set(qn('r:id'), rel_id)
+
+                # Create a run within the hyperlink
+                new_run = OxmlElement('w:r')
+                
+                # Set run properties (blue color, underline)
+                rPr = OxmlElement('w:rPr')
+                
+                # Color (Blue)
+                color = OxmlElement('w:color')
+                color.set(qn('w:val'), '0000FF')
+                rPr.append(color)
+                
+                # Underline
+                u = OxmlElement('w:u')
+                u.set(qn('w:val'), 'single')
+                rPr.append(u)
+                
+                # Bold
+                b = OxmlElement('w:b')
+                rPr.append(b)
+                
+                # Font
+                rFonts = OxmlElement('w:rFonts')
+                rFonts.set(qn('w:ascii'), 'Times New Roman')
+                rFonts.set(qn('w:hAnsi'), 'Times New Roman')
+                rPr.append(rFonts)
+                
+                # Size (12pt = 24 half-points)
+                sz = OxmlElement('w:sz')
+                sz.set(qn('w:val'), '24')
+                rPr.append(sz)
+                
+                new_run.append(rPr)
+                
+                # Set run text
+                t = OxmlElement('w:t')
+                t.text = clean_url
+                new_run.append(t)
+                
+                hyperlink.append(new_run)
+                paragraph._p.append(hyperlink)
+                
+                logger.debug(f"Created native hyperlink for: {clean_url}")
+            except Exception as e:
+                logger.error(f"Failed to create native hyperlink for {clean_url}: {str(e)}")
+                # Fallback to simple run if native fails
+                run = paragraph.add_run(clean_url)
+                run.font.color.rgb = RGBColor(0, 0, 255)
                 run.font.bold = True
-                run.font.size = Pt(12)
                 run.font.underline = True
-                run.font.name = 'Times New Roman'
 
-                # Add hyperlink relationship
-                try:
-                    part_elem = run._element
-                    # Get relationship ID from parent document
-                    rel_id = paragraph._parent._element.getparent().part.relate_to(
-                        clean_part, 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink',
-                        is_external=True
-                    )
-                except Exception as e:
-                    logger.debug(f"Could not create hyperlink for {clean_part}: {str(e)}")
-            else:
-                # Regular text with formatting support
-                if part:
-                    # Remove backticks from regular text too
-                    part = part.replace('`', '')
-                    if part:
-                        self._add_formatted_runs(paragraph, part)
+            last_end = m.end()
+
+        # Add any remaining text after last URL
+        remaining = text[last_end:]
+        if remaining:
+            # Strip stray backticks
+            remaining = remaining.replace('`', '')
+            if remaining:
+                self._add_formatted_runs(paragraph, remaining)
 
     def _convert_html_to_markdown(self, text):
         """Convert HTML formatting tags to markdown for consistent parsing"""
@@ -549,7 +604,10 @@ class MarkdownConverter:
         """Add regular paragraph with formatting support"""
         para = self.doc.add_paragraph()
         text = self._convert_html_to_markdown(text)
-        self._add_formatted_runs(para, text)
+        if 'http://' in text or 'https://' in text:
+            self._add_url_hyperlink(para, text)
+        else:
+            self._add_formatted_runs(para, text)
         para.paragraph_format.space_before = Pt(2)
         para.paragraph_format.space_after = Pt(4)
 
@@ -598,7 +656,14 @@ class MarkdownConverter:
                     run = paragraph.add_run(part)
                     run.font.bold = is_bold
                     run.font.italic = is_italic
-                    if is_code:
+                    if is_code and re.match(r'https?://', part):
+                        # URL inside backtick code span - render as blue hyperlink
+                        run.font.name = 'Times New Roman'
+                        run.font.size = Pt(12)
+                        run.font.color.rgb = RGBColor(0, 0, 255)
+                        run.font.bold = True
+                        run.font.underline = True
+                    elif is_code:
                         run.font.name = 'Consolas'
                         run.font.size = Pt(10)
                         run.font.color.rgb = RGBColor(0, 0, 0)
@@ -862,6 +927,8 @@ class MarkdownConverter:
                     '**Important:**': ('important', '#fef2f2', '#dc2626', '#991b1b'),
                     '**Caution:**': ('caution', '#fefce8', '#ca8a04', '#92400e'),
                     '**Congratulations:**': ('congratulations', '#faf5ff', '#9333ea', '#6b21a8'),
+                    '**Question:**': ('question', '#fdf6ec', '#92400e', '#78350f'),
+                    '**Answer:**': ('answer', '#fdf6ec', '#92400e', '#78350f'),
                 }
 
                 found_callout = False
@@ -1169,3 +1236,4 @@ if __name__ == '__main__':
     converter = MarkdownConverter(sys.argv[1], sys.argv[2])
     success = converter.convert()
     sys.exit(0 if success else 1)
+
