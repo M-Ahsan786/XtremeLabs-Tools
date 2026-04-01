@@ -307,48 +307,80 @@
         </main>
 
         <!-- Footer -->
-        <footer class="relative z-10 mt-20 border-t border-blue-500/20 py-12">
+        <footer class="relative z-10 mt-10 border-t border-blue-500/20 py-6">
             <div class="w-full max-w-6xl mx-auto px-4">
-                <div class="grid md:grid-cols-3 gap-8 items-center animate-slide-up" style="animation-delay: 0.4s">
+                <div class="grid md:grid-cols-3 gap-4 items-center animate-slide-up" style="animation-delay: 0.4s">
                     <!-- Developer Info -->
                     <div class="text-center md:text-left flex flex-col items-center md:items-start">
-                        <div class="flex items-center gap-3 mb-2">
+                        <div class="flex items-center gap-3 mb-1">
                             <img src="/static/mypic.jpg" alt="Developer"
-                                class="w-12 h-12 rounded-full border-2 border-blue-400 object-cover">
+                                class="w-10 h-10 rounded-full border-2 border-blue-400 object-cover">
                             <div>
-                                <h4 class="text-lg font-semibold text-white">Developed By</h4>
-                                <p class="text-blue-300">Hafiz Muhammad Ahsan</p>
+                                <h4 class="text-sm font-semibold text-white">Developed By</h4>
+                                <p class="text-blue-300 text-sm">Hafiz Muhammad Ahsan</p>
                             </div>
                         </div>
-                        <p class="text-blue-400 text-sm">Lab Document Converter Tool</p>
+                        <p class="text-blue-400 text-xs">Lab Document Converter Tool</p>
                     </div>
 
                     <!-- Contact -->
-                    <div class="text-center flex flex-col items-center gap-3">
-                        <h4 class="text-lg font-semibold text-white mb-2">Contact Us</h4>
-                        <a href="https://wa.me/923042288296" target="_blank"
-                            class="w-full max-w-[180px] justify-center inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500/20 hover:bg-green-500/40 text-green-300 transition-all duration-300 hover:scale-105 text-[0.8rem] font-medium">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-5.031 1.378l-.361.214-3.741-.982.998 3.645-.235.364a9.964 9.964 0 001.516 5.383c.608 1.02 1.414 1.966 2.368 2.72.96.749 2.016 1.325 3.105 1.7 1.243.379 2.589.443 3.908.142 4.411-.926 7.6-5.053 7.6-9.77 0-2.664-.862-5.159-2.509-7.262-.937-1.204-2.104-2.236-3.424-2.979-.677-.408-1.393-.749-2.121-.996z" />
-                            </svg>
-                            WhatsApp
-                        </a>
+                    <div class="text-center flex flex-col items-center gap-2">
+                        <h4 class="text-sm font-semibold text-white">Contact Us</h4>
 
-                        <a href="https://hafizmuhammadahsan.vercel.app/" target="_blank"
-                            class="w-full max-w-[180px] justify-center inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/25 border border-indigo-500/15 text-indigo-400 transition-all duration-300 hover:scale-105 text-[0.8rem] font-medium">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- Emails Row -->
+                        <div class="flex flex-row flex-wrap justify-center gap-2">
+
+                            <!-- Info Email -->
+                            <a href="mailto:info@xtremelabs.io" target="_blank"
+                                class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-500/20 hover:bg-green-500/40 text-green-300 transition-all duration-300 hover:scale-105 text-[0.75rem] font-medium">
+                                <svg style="width: 15px; height: 15px; flex-shrink: 0;" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Info
+                            </a>
+
+                            <!-- Sales Email -->
+                            <a href="mailto:sales@xtremelabs.io" target="_blank"
+                                class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-500/20 hover:bg-green-500/40 text-green-300 transition-all duration-300 hover:scale-105 text-[0.75rem] font-medium">
+                                <svg style="width: 15px; height: 15px; flex-shrink: 0;" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Sales
+                            </a>
+
+                            <!-- Support Email -->
+                            <a href="mailto:support@xtremelabs.io" target="_blank"
+                                class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-500/20 hover:bg-green-500/40 text-green-300 transition-all duration-300 hover:scale-105 text-[0.75rem] font-medium">
+                                <svg style="width: 15px; height: 15px; flex-shrink: 0;" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Support
+                            </a>
+
+                        </div>
+
+                        <!-- Marketplace -->
+                        <a href="https://www.xtremelabs.io/" target="_blank"
+                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/25 border border-indigo-500/15 text-indigo-400 transition-all duration-300 hover:scale-105 text-[0.75rem] font-medium">
+                            <svg style="width: 15px; height: 15px; flex-shrink: 0;" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                             </svg>
-                            My Portfolio
+                            XtremeLabs Marketplace
                         </a>
                     </div>
 
                     <!-- Footer Note -->
                     <div class="text-center md:text-right">
-                        <p class="text-blue-300 text-sm">🚀 Modern Web Application - v.1</p>
-                        <p class="text-slate-500 text-xs mt-2">© 2026 Lab Document Converter</p>
+                        <p class="text-blue-300 text-xs">🚀 Modern Web Application - v.1</p>
+                        <p class="text-slate-500 text-xs mt-1">© 2026 Feature Page Merger</p>
                     </div>
                 </div>
             </div>
