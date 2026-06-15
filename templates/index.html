@@ -32,6 +32,7 @@
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
+
         }
 
         a {
@@ -1062,7 +1063,7 @@
                     </span>
                     <span class="logo-text">tremeLabs Tools</span>
                 </h1>
-                <div class="tagline">Content Automation & Intelligence Suite</div>
+                <div class="tagline">Document Automation & Workflow Suite</div>
             </div>
 
             <!-- Modern Navigation -->
@@ -1073,6 +1074,7 @@
                 <a href="#exam-card" class="nav-link">Practice Exam</a>
                 <a href="#tco-card" class="nav-link">TOC</a>
                 <a href="#summary-card" class="nav-link">Summary Doc</a>
+                <a href="#report-card" class="nav-link">Report Generator</a>
             </nav>
 
             <div class="header-right">
@@ -1161,10 +1163,13 @@
             <!-- Summary Doc Generator -->
             <a href="https://summary-document-generator.vercel.app/" target="_blank" id="summary-card"
                 class="card anim-up anim-d7">
-                <div class="card-icon icon-green" style="background: rgba(34,197,94,0.15); color: #22c55e;">&#128203;</div>
+                <div class="card-icon icon-green" style="background: rgba(34,197,94,0.15); color: #22c55e;">&#128203;
+                </div>
                 <h2 class="card-title" style="color: #22c55e;">Summary Doc Generator</h2>
-                <p class="card-desc">You can generate summary document of your course and also update the summary document in new format.</p>
-                <div class="cta" style="background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.25);">
+                <p class="card-desc">You can generate summary document of your course and also update the summary
+                    document in new format.</p>
+                <div class="cta"
+                    style="background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.25);">
                     Launch Tool
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1176,33 +1181,56 @@
 
         <!-- ─── Divider ─── -->
         <div class="divider anim-up anim-d4">
-            <span>More Tools</span>
+            <span>Other Tools</span>
         </div>
 
-        <!-- ─── Coming Soon Tools ─── -->
-        <div class="grid-3" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 1100px; margin: 0 auto;">
+        <!-- ─── Other Tools ─── -->
+        <div class="grid-3"
+            style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 1100px; margin: 0 auto;">
             <!-- Scoring Guider -->
             <a href="https://xtremelabs.cyberdevservices.com/login.php" target="_blank" id="scoringGuiderLink"
-                class="card card-sm anim-up anim-d7">
+                class="card card-sm anim-up anim-d5">
                 <div class="card-icon icon-amber">🎯</div>
                 <span class="badge"><span class="dot"></span>More Tools</span>
-                <h2 class="card-title t-amber">Content Evaluation Toolkit</h2>
+                <h2 class="card-title t-amber">XtremeLabs Automation Tools</h2>
                 <p class="card-desc">You can use this tool to get help with creating Scoring, Practice Exams, and Course
                     Summaries.</p>
                 <div class="cta cta-muted">Click Me!</div>
             </a>
 
             <!-- Markdown Translator Extension -->
-            <a href="https://chromewebstore.google.com/detail/xtremelabs-translator/dhmdkebockhdeknplmeaaobbhdfnnkna?utm_source=item-share-cb" target="_blank" 
-                class="card card-sm anim-up anim-d8">
-                <div class="card-icon icon-cyan" style="background: rgba(34,211,238,0.15); color: #22d3ee;">&#127760;</div>
-                <span class="badge" style="background: rgba(34,211,238,0.1); color: #22d3ee;"><span class="dot" style="background: #22d3ee;"></span>Chrome Extension</span>
+            <a href="https://chromewebstore.google.com/detail/mnfhgbacfkpapkeamhhceafofnjnkcac?utm_source=item-share-cb"
+                target="_blank" class="card card-sm anim-up anim-d6">
+                <div class="card-icon icon-cyan" style="background: rgba(34,211,238,0.15); color: #22d3ee;">&#127760;
+                </div>
+                <span class="badge" style="background: rgba(34,211,238,0.1); color: #22d3ee;"><span class="dot"
+                        style="background: #22d3ee;"></span>Chrome Extension</span>
                 <h2 class="card-title" style="color: #22d3ee;">Markdown Translator Extension</h2>
-                <p class="card-desc">You can install this extension on Chrome to translate XtremeLabs overlays into any language for easier reading.</p>
-                <div class="cta" style="background: rgba(34,211,238,0.1); color: #22d3ee; border: 1px solid rgba(34,211,238,0.25); border-radius: 8px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-top: 8px;">
+                <p class="card-desc">You can install this extension on Chrome to translate XtremeLabs overlays into any
+                    language for easier reading.</p>
+                <div class="cta"
+                    style="background: rgba(34,211,238,0.1); color: #22d3ee; border: 1px solid rgba(34,211,238,0.25); border-radius: 8px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-top: 8px;">
                     Get Extension
                 </div>
             </a>
+        </div>
+
+        <!-- ─── Divider ─── -->
+        <div class="divider anim-up anim-d5">
+            <span>Coming Soon</span>
+        </div>
+
+        <!-- ─── Coming Soon Tools ─── -->
+        <div class="grid-3"
+            style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 1100px; margin: 0 auto;">
+            <!-- Report Generator (Coming Soon) -->
+            <div id="report-card" class="card card-sm anim-up anim-d6">
+                <div class="card-icon icon-amber">📊</div>
+                <span class="badge"><span class="dot"></span>Coming Soon</span>
+                <h2 class="card-title t-amber">Report Generator</h2>
+                <p class="card-desc">Compare an old Word document with an updated one. Generates a comprehensive report highlighting modifications, additions, and deletions.</p>
+                <div class="cta cta-muted">Coming Soon</div>
+            </div>
         </div>
 
     </div>
