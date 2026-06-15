@@ -88,6 +88,9 @@ class MarkdownConverter:
             with open(self.markdown_file, 'r', encoding='utf-8') as f:
                 content = f.read()
 
+            # Preprocessing: Remove HTML comments (single-line and multi-line)
+            content = re.sub(r'<!--.*?-->', '', content, flags=re.DOTALL)
+
             # PERFORMANCE: Extract and pre-fetch all images concurrently
             if self.include_images:
                 image_urls = self._extract_all_image_urls(content)
@@ -101,13 +104,11 @@ class MarkdownConverter:
                 line = lines[i]
                 trimmed = line.strip()
 
-                # Skip empty lines
-                if not trimmed:
-                    i += 1
-                    continue
+                # Strip <br>, </br>, <br/> tags from the line (preserve surrounding content)
+                trimmed = re.sub(r'</?br\s*/?>', '', trimmed).strip()
 
-                # Skip HTML-only tags
-                if trimmed in ['</br>', '<br>', '<br/>']:
+                # Skip empty lines (including lines that were only br tags)
+                if not trimmed:
                     i += 1
                     continue
 
@@ -245,7 +246,7 @@ class MarkdownConverter:
                     continue
 
                 # Handle regular paragraphs
-                if trimmed and not trimmed.startswith('<'):
+                if trimmed:
                     self.add_paragraph(trimmed)
                     i += 1
                     continue
@@ -580,6 +581,8 @@ class MarkdownConverter:
 
     def _convert_html_to_markdown(self, text):
         """Convert HTML formatting tags to markdown for consistent parsing"""
+        # Remove HTML comments (single-line and inline)
+        text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL)
         # First convert HTML entities
         text = text.replace('&nbsp;', ' ')
         text = text.replace('&lt;', '<')
@@ -613,6 +616,8 @@ class MarkdownConverter:
 
     def _add_formatted_runs(self, paragraph, text):
         """Parse and add formatted text runs - exactly matching example.html parseInlineFormatting"""
+        # Remove HTML comments before processing
+        text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL).strip()
         remaining = text
 
         # Replace patterns with markers - EXACT ORDER matching example.html
@@ -847,6 +852,9 @@ class MarkdownConverter:
             with open(self.markdown_file, 'r', encoding='utf-8') as f:
                 content = f.read()
 
+            # Preprocessing: Remove HTML comments (single-line and multi-line)
+            content = re.sub(r'<!--.*?-->', '', content, flags=re.DOTALL)
+
             # Extract and cache images for better performance
             if self.include_images:
                 image_urls = self._extract_all_image_urls(content)
@@ -861,13 +869,11 @@ class MarkdownConverter:
                 line = lines[i]
                 trimmed = line.strip()
 
-                # Skip empty lines
-                if not trimmed:
-                    i += 1
-                    continue
+                # Strip <br>, </br>, <br/> tags from the line (preserve surrounding content)
+                trimmed = re.sub(r'</?br\s*/?>', '', trimmed).strip()
 
-                # Skip HTML-only tags
-                if trimmed in ['</br>', '<br>', '<br/>']:
+                # Skip empty lines (including lines that were only br tags)
+                if not trimmed:
                     i += 1
                     continue
 
