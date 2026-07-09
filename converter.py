@@ -114,19 +114,19 @@ class MarkdownConverter:
 
                 # Handle headings (##, ###, ####)
                 if trimmed.startswith('## ') and not trimmed.startswith('### '):
-                    text = trimmed[3:]
+                    text = trimmed[3:].replace('*', '')
                     self.add_heading_1(text)
                     i += 1
                     continue
 
                 if trimmed.startswith('#### '):
-                    text = trimmed[5:]
+                    text = trimmed[5:].replace('*', '')
                     self.add_heading_2(text)
                     i += 1
                     continue
 
                 if trimmed.startswith('### '):
-                    text = trimmed[4:]
+                    text = trimmed[4:].replace('*', '')
                     self.add_heading_3(text)
                     i += 1
                     continue
@@ -1242,4 +1242,3 @@ if __name__ == '__main__':
     converter = MarkdownConverter(sys.argv[1], sys.argv[2])
     success = converter.convert()
     sys.exit(0 if success else 1)
-
